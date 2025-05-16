@@ -2,19 +2,36 @@ namespace proba2
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public static List<Auto> autok = new List<Auto>();
+
+        public static void Beolvasas()
         {
             string filenev = "autok.csv";
-            var autok = new List<Auto>();
+
             string[] sorok = File.ReadAllLines(filenev);
+
             foreach (var sor in sorok.Skip(1))
             {
                 var tagok = sor.Split(',');
+
                 if (tagok.Length == 4)
                 {
-                    autok.Add(new Auto(int.Parse(tagok[0]), tagok[1], int.Parse(tagok[2]), int.Parse(tagok[3])));
+                    autok.Add(new Auto(
+                        int.Parse(tagok[0]),
+                        tagok[1],
+                        int.Parse(tagok[2]),
+                        int.Parse(tagok[3])
+                    ));
                 }
             }
+        }
+
+
+
+
+        static void Main(string[] args)
+        {
+            Beolvasas();
             foreach (var auto in autok)
             {
                 Console.WriteLine($"{auto.Id} {auto.Évjárat} {auto.Ár} {auto.Márka}");
@@ -32,6 +49,7 @@ namespace proba2
                 })
                 .OrderBy(g => g.Évjárat);
 
+
             Console.WriteLine("\nÁtlag ár évjáratonként:");
             foreach (var item in evjaratAtlagAr)
             {
@@ -47,22 +65,24 @@ namespace proba2
 
             Auto legfiatalabb = autok.OrderBy(a => a.Évjárat).Last();
             Auto legidősebb = autok.OrderBy(a => a.Évjárat).First();
-            Console.WriteLine($"Legidősebb:{legidősebb.Évjárat}");
+            Console.WriteLine($"Legidősebb:{legidősebb.Évjárat} {legidősebb.Márka}  ");
             Console.WriteLine($"Legfiatalabb:{legfiatalabb.Évjárat}");
             int km = 100;
             int üzár = 560;
             int fogy = 6;
-            költés(km, üzár, fogy);
+            int kolt = költés(km, üzár, fogy);
+
+            Console.WriteLine("A költség: " + kolt + " Ft");
         }
 
 
 
-        public static void költés(int km, int üzár, int fogy)
+        public static int költés(int km, int üzár, int fogy)
         {
-            int összliter = (km * fogy) / 100;
-            int költség = összliter * üzár;
+            double összliter = (double)(km * fogy) / 100;
+            double költség = összliter * üzár;
 
-            Console.WriteLine($"Várható üzemanyag költség: {költség}");
+            return (int)költség;
 
         }
     }

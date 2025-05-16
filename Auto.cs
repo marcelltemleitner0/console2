@@ -1,5 +1,3 @@
-﻿using System;
-
 public class Auto
 {
     public int Id { get; set; }
